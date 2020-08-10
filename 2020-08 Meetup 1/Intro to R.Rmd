@@ -1,5 +1,5 @@
 ---
-title: "R Language Introduction"
+title: "Gentle Introduction to Data Analysis in R"
 author: "Bilikisu W. Aderinto"
 date: "8/6/2020"
 output: html_document
@@ -8,6 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+![tidyverse training, Mine Çetinkaya-Rundel](tidyverse-packages.png)
+### 
 
 ## What is R?
 
@@ -17,9 +19,6 @@ For more details on using R language see <https://www.r-project.org/about.html>.
 ## Installation of R and RStudio
 <https://rstudio-education.github.io/hopr/starting.html>
 
-##  Why do we need Analytics ?
-
-## What is Business Analytics ?
 ## Why R ?
 
 
@@ -36,24 +35,255 @@ class(second_text)
 ## Basic Mathemetical Operations
 
 ```{r}
+# Addition
+2+1
+
+# Subtraction
+2-1
+
+# Multiplication
+2*3
+
+# Division
+3/2
+
+# Exponentials
+9^(1/2)
+
+# Modulus
+33%%4
 
 ```
+
+### Logical Operators
+- <	Less Than
+- >	Greater Than
+- <= Less Than or Equal To
+- >= Greater Than or Equal To
+- == Exactly Equal To
+- != Not Equal To
+- !x Not x
+- x&y x AND y
+- x|y x OR y
+
+```{r}
+x = 24
+y = 3
+
+x<y
+x>y
+
+x==y
+x|y
+
+
+```
+
+
+## Create a variable
+```{r}
+num_variable <- 23
+
+num_variable
+```
+
+
 
 ## Data Types
+We look at character, numeric, integer, complex and logical data types
+
 ```{r}
+# Character
+chr_var <- "Football"
+# check the data type
+class(chr_var)
+
+# Numeric
+num_var <- 23.3
+class(num_var)
+
+# Integer
+int_var <- 2L
+class(int_var)
+
+# complex
+comp_var <- 2+3i
+class(comp_var)
+
+# Convert between types
+num_to_int <- as.integer(num_var)
+class(num_to_int)
+
+# Logical
+is_present <- TRUE
+
+```
+
+## Data Structures
+Data structures in R includes vector, list, matrix, array, factors, data frame and tibble
+
+### Vector
+- is the most common and basic data structure in R
+- common type or mode could be character, logical, integer or numeric.
+- all elements are the same type or *implicit coercion occurs*
+
+```{r}
+
+name_vector <- c("Ada","Bello","Joy","Kelvin","Itunu")
+class(name_vector)
+name_vector[2]
+name_vector[2:4]
+
+# or 
+name_vector <- vector() # vector("numeric", length = 10)
+
+num_vec <- 1:20
+
+# What happens if there are multiple data types of elements in a vector?
+mixed_vec <- c("Ada", 28, "married", FALSE) # Implicit coercion
+class(mixed_vec)
+
+```
+
+### List
+- generic vector with different data types
+
+```{r}
+student_list <- list(name=c("Ada","Bimbo","Aisha","Eze"),
+                     age=c(24,25,30,45), 
+                     marital_status=c("Single", "Married", "Divorced", 
+                                      "Married"), 
+                     is_student=c(TRUE,FALSE,FALSE,TRUE))
+
+student_list
+
+# Slicing List
+student_list[2]
+student_list[[2]][1]
+
+student_list[["is_student"]][2]
+
+
+# What is the difference between using single and double square brackets?
+class(student_list["is_student"])
+
+class(student_list[["is_student"]])
+
+```
+
+### Matrix
+- vector with 2 dimensional, rectangular layout
+- same data type
+
+```{r}
+mat_str <- matrix(c(1:20), 4,5) # define matrix with 4 rows and 5 columns
+mat_str
+
+# dimension of matrix
+dim(mat_str)
+
+# assigning column and row names
+dimnames(mat_str) <- list(c("row1","row2","row3","row4"),
+                          c("col1","col2","col3","col4","col5"))
+
+rownames(mat_str) <- c("r1","r2","r3","r4")
+colnames(mat_str) <- c("c1","c2","c3","c4","c5")
+
+dimnames(mat_str)
+mat_str
+
+# What if the values are less than or more than the specified dimension?
+mat_str <- matrix(c(1:20), 4,7)
+mat_str <- matrix(c(1:20), 4,3)
+
+# What if no dimension was specified?
+#mat_str <- matrix(c(1:20))
+
+# select value in column 1, row 3
+mat_str[3]
+
+# select all values in row 3
+mat_str[3,]
+
+# select all values in column 3
+mat_str[,3]
+
+# select value in row 1, column 3. That is, 9
+mat_str[1,3]
+
+# Selecting values from multiple columns and rows
+mat_str <- matrix(c(1:20), 4,5)
+mat_str[c(2:4),]
+mat_str[,c(1:3)]
+
+```
+
+### Arrays
+- holds multi-dimensional data
+- 
+```{r}
+arr_str <- array(c(1:21), dim=c(2,5)) # What happened?
+arr_str # difference compared to matrix in structure flexibility
+
+```
+
+### Data frame
+- similar to a matrix in appearance 
+- multiple types of data like a list
+- each column contain the same type of data or it defaults to character type in R
+
+```{r}
+name <- c("Kemi", "Bala", "John", "Ike", "Shola", "Yoyo", "Ameenat", "Ijeoma")
+age <- c(27,36, 13, 20, 19, 34, 29, 20)
+marital_status <- c(TRUE, T, F, FALSE, TRUE, T, T, F)
+students <- data.frame(name, age, marital_status)
+students
+```
+### Add rows or columns to data frame
+```{r}
+
+rbind(students, c("Eze", 22, TRUE))
+cbind(students, "state")
+students[,"state"] <- c("Lagos", "FCT", "Kogi", "Abia", "Cross-River", "Kano", "Oyo", "Enugu")
+
+students
+
+```
+### Accessing elements in data frame
+```{r}
+students$name
+students$name[2]
+
+students[2,3]
+students[2,]
+students[,3]
+
+students[1:2, ]
+
+head(students)
+tail(students)
+
+```
+
+### Subsetting in data frame
+```{r}
+students[students$age>20,]
+
+students[students$age>20&students$state=="Oyo", ]
 
 ```
 
 
-## Data Operator
-
+### Tibble
+Information tibble <https://tibble.tidyverse.org/>
 ```{r}
+library(tidyverse)
+
+tbl_data <- tibble(x = 1:3, y = list(1:3, 1:5, 1:10))
+
+# Issues with data frame
+df_data <- as_data_frame(x = 1:3, y = list(1:3, 1:5, 1:10))
 
 ```
 
-##  Flow Control
-
-```{r}
-
-```
-
+Till next week, bye!
